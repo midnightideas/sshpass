@@ -24,14 +24,14 @@ git clone "$git_remote" ./
 git config user.email "$git_email"
 git config user.name "$git_name"
 
-$GIT_SSH_COMMAND 'echo test'
+$GIT_SSH_COMMAND git@github.com 'echo test'
 
 mkdir -p ./Formula
 cp "$dist_dir"/sshpass.rb ./Formula/sshpass.rb
 git add ./Formula/sshpass.rb
 if ! git diff --cached --exit-code >/dev/null; then
-  git commit -m'Update sshpass'
-  git push
+  git commit -m'Update sshpass' --exit-code
+  git push --exit-code
 fi
 
 popd || exit 1
