@@ -13,7 +13,10 @@ source "$base_dir"/data/"$CIRCLE_BRANCH"/env-build
 
 dist_dir="$base_dir"/dist
 
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $base_dir/data/$CIRCLE_BRANCH/ssh-identity"
+identity="$base_dir"/data/"$CIRCLE_BRANCH"/ssh-identity
+chmod 400 "$identity"
+
+export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $identity"
 
 temp_dir="$(mktemp -d)"
 
@@ -23,8 +26,6 @@ git clone "$git_remote" ./
 
 git config user.email "$git_email"
 git config user.name "$git_name"
-
-printenv
 
 mkdir -p ./Formula
 cp "$dist_dir"/sshpass.rb ./Formula/sshpass.rb
