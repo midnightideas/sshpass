@@ -13,11 +13,6 @@ source "$base_dir"/data/"$CIRCLE_BRANCH"/env-build
 
 dist_dir="$base_dir"/dist
 
-identity="$base_dir"/data/"$CIRCLE_BRANCH"/ssh-identity
-chmod 400 "$identity"
-
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i $identity"
-
 temp_dir="$(mktemp -d)"
 
 pushd "$temp_dir" || exit 1
