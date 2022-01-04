@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+base_dir="$(cd "$(dirname "$0")/.." && pwd)"
+
+function errout() {
+  message="$1"
+  echo "❌ $message"
+  exit 1
+}
+
+[[ -z "$CIRCLE_BRANCH" ]] && errout "\$CIRCLE_BRANCH is not defined".
+source "$base_dir"/data/"$CIRCLE_BRANCH"/env-build
+
+dist_dir="$base_dir"/dist
+
+export GIT_SSH_COMMAND="ssh -i $base_dir/data/$CIRCLE_BRANCH/ssh-identity"
+
+temp_dir="$(mktemp -d)"
+
+pushd "$temp_dir" || exit 1
+
+git clone "$git_remote" ./
+mkdir -p ./Formula
+cp "$dist_dir"/sshpass.rb ./Formula/sshpass.rb
+git add ./Formula/sshpass.rb
+if ! git diff --cached --exit-code >/dev/null; then
+  git commit -m'Update sshpass'
+  git push
+fi
+
+popd || exit 1

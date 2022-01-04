@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+base_dir="$(cd "$(dirname "$0")/.." && pwd)"
+
+function errout() {
+  message="$1"
+  echo "❌ $message"
+  exit 1
+}
+
+[[ -z "$CIRCLE_BRANCH" ]] && errout "\$CIRCLE_BRANCH is not defined".
+source "$base_dir"/data/"$CIRCLE_BRANCH"/env-build
+
+dist_dir="$base_dir"/dist
+
+[[ -e "$dist_dir" ]] && rm -rf "$dist_dir"
+mkdir -p "$dist_dir"
+
+source_url="$(cat "$base_dir"/src/source.txt)"
+template_file="$base_dir"/templates/sshpass.rb
+
+sha256="$(curl "$source_url" | sha256sum - | awk '{ print $1 }')"
+
+[[ -e "$dist_dir" ]] && rm -rf "$dist_dir"
+mkdir -p "$dist_dir"
+
+sed 's/$url/'${source_url//\//\\\/}'/g;s/$sha256/'${sha256//\//\\\/}'/g' \
+  <"$template_file" \
+  >"$dist_dir"/sshpass.rb

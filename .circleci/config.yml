@@ -1,0 +1,22 @@
+version: 2.1
+
+workflows:
+  deploy:
+    jobs:
+      - deploy
+
+jobs:
+  deploy:
+    machine: true
+    resource_class: midnightideas/outerman
+    steps:
+      - checkout
+      - run:
+          name: 'Reveal git secret'
+          command: 'git secret reveal -f'
+      - run:
+          name: 'Build dist'
+          command: './bin/build'
+      - run:
+          name: 'Upload to server'
+          command: './bin/deploy'
