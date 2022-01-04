@@ -20,6 +20,10 @@ temp_dir="$(mktemp -d)"
 pushd "$temp_dir" || exit 1
 
 git clone "$git_remote" ./
+
+git config user.email "$git_email"
+git config user.name "$git_name"
+
 mkdir -p ./Formula
 cp "$dist_dir"/sshpass.rb ./Formula/sshpass.rb
 git add ./Formula/sshpass.rb
