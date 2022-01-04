@@ -19,7 +19,10 @@ mkdir -p "$dist_dir"
 source_url="$(cat "$base_dir"/src/source.txt)"
 template_file="$base_dir"/templates/sshpass.rb
 
-sha256="$(curl "$source_url" | sha256sum - | awk '{ print $1 }')"
+temp_dir="$(mktemp -d)"
+wget "$source_url" -O "$temp_dir"/sshpass.tar.gz
+sha256="$(sha256sum "$temp_dir"/sshpass.tar.gz | awk '{ print $1 }')"
+rm -rf "$temp_dir"
 
 [[ -e "$dist_dir" ]] && rm -rf "$dist_dir"
 mkdir -p "$dist_dir"
