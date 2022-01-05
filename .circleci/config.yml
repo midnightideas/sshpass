@@ -1,18 +1,15 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4
 
 workflows:
 
   deploy:
     jobs:
-      - deploy
-      - notify:
+      - deploy:
           context:
-            - slack-derycka
-          requires:
-            - deploy
+            - slack
 
   nightly:
     triggers:
@@ -23,12 +20,9 @@ workflows:
               only:
                 - main
     jobs:
-      - deploy
-      - notify:
+      - deploy:
           context:
-            - slack-derycka
-          requires:
-            - deploy
+            - slack
 
 jobs:
 
@@ -46,11 +40,6 @@ jobs:
       - run:
           name: 'Upload to server'
           command: './bin/deploy'
-
-  notify:
-    machine: true
-    resource_class: midnightideas/outerman
-    steps:
       - slack/notify:
           event: fail
           channel: cicd
@@ -58,4 +47,4 @@ jobs:
       - slack/notify:
           event: pass
           channel: cicd
-          template: success_tagged_deploy_1
+          template: basic_success_1
