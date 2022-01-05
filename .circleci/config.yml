@@ -4,7 +4,24 @@ orbs:
   slack: circleci/slack@4.1
 
 workflows:
+
   deploy:
+    jobs:
+      - deploy
+      - notify:
+          context:
+            - slack-derycka
+          requires:
+            - deploy
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: '0 15 * * *'
+          filters:
+            branches:
+              only:
+                - main
     jobs:
       - deploy
       - notify:
