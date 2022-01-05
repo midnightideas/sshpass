@@ -2,7 +2,7 @@
 
 file_listing_url=https://sourceforge.net/projects/sshpass/files/sshpass/
 
-current_version="$(curl -s "$file_listing_url" | grep -oEi 'net\.sf\.files = {"[^"]+": {"name":' | grep -oEi '\d+\.\d+')"
+current_version="$(curl -s "$file_listing_url" | grep -oEi 'net\.sf\.files = {"[^"]+": {"name":' | grep -oEi '[0-9]+\.[0-9]+')"
 
 [[ -z "$current_version" ]] && exit 1
 
