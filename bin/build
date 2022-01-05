@@ -23,8 +23,8 @@ echo "Found latest version at $source_url"
 template_file="$base_dir"/templates/brew.rb
 
 temp_dir="$(mktemp -d)"
-wget -q "$source_url" -O "$temp_dir"/sshpass.tar.gz
-sha256="$(sha256sum "$temp_dir"/sshpass.tar.gz | awk '{ print $1 }')"
+wget -q "$source_url" -O "$temp_dir"/"$app_name".tar.gz
+sha256="$(sha256sum "$temp_dir"/"$app_name".tar.gz | awk '{ print $1 }')"
 rm -rf "$temp_dir"
 echo "SHA256: $sha256"
 
@@ -33,4 +33,4 @@ mkdir -p "$dist_dir"
 
 sed 's/$url/'${source_url//\//\\\/}'/g;s/$sha256/'${sha256//\//\\\/}'/g' \
   <"$template_file" \
-  >"$dist_dir"/sshpass.rb
+  >"$dist_dir"/"$app_name".rb

@@ -1,5 +1,3 @@
-require 'formula'
-
 class Sshpass < Formula
   url '$url'
   homepage 'http://sourceforge.net/projects/sshpass'

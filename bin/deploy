@@ -23,10 +23,10 @@ git config user.email "$git_email"
 git config user.name "$git_name"
 
 mkdir -p ./Formula
-cp "$dist_dir"/sshpass.rb ./Formula/sshpass.rb
-git add ./Formula/sshpass.rb
+cp "$dist_dir"/"$app_name".rb ./Formula/"$app_name".rb
+git add ./Formula/"$app_name".rb
 if ! git diff --cached --exit-code >/dev/null; then
-  git commit -m'Update sshpass'
+  git commit -m"Update $app_name"
   git push
 fi
 
