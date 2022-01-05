@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+file_listing_url=https://sourceforge.net/projects/sshpass/files/sshpass/
+
+current_version="$(curl -s "$file_listing_url" | grep -oEi 'net\.sf\.files = {"[^"]+": {"name":' | grep -oEi '\d+\.\d+')"
+
+[[ -z "$current_version" ]] && exit 1
+
+echo "https://sourceforge.net/projects/sshpass/files/sshpass/$current_version/sshpass-$current_version.tar.gz"

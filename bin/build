@@ -16,13 +16,16 @@ dist_dir="$base_dir"/dist
 [[ -e "$dist_dir" ]] && rm -rf "$dist_dir"
 mkdir -p "$dist_dir"
 
-source_url="$(cat "$base_dir"/src/source.txt)"
+source_url="$("$base_dir"/bin/locate_source_url)"
+echo "Found latest version at $source_url"
+
 template_file="$base_dir"/templates/brew.rb
 
 temp_dir="$(mktemp -d)"
-wget "$source_url" -O "$temp_dir"/sshpass.tar.gz
+wget -q "$source_url" -O "$temp_dir"/sshpass.tar.gz
 sha256="$(sha256sum "$temp_dir"/sshpass.tar.gz | awk '{ print $1 }')"
 rm -rf "$temp_dir"
+echo "SHA256: $sha256"
 
 [[ -e "$dist_dir" ]] && rm -rf "$dist_dir"
 mkdir -p "$dist_dir"
